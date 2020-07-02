@@ -55,8 +55,12 @@ def gameLoop():
     # START CODING HERE
 
     # 1. Set x1 and y1 (the position of the block) to the center of the screen
+    x1 = int(dis_width/2)
+    y1 = int(dis_height/2)
 
     # 2. Set x1_change and y1_change to 0 since the snake isn't moving yet
+    x1_change = 0
+    y1_change = 0
 
     # A list that will change as the snake gets bigger
     snake_List = []
@@ -64,6 +68,8 @@ def gameLoop():
     snake_length = 1
 
     #Position the food (foodx, foody) to a random location using random module
+    foodx = random.randint(0, dis_width)
+    foody = random.randint(0, dis_height)
 
     #While the game is not over
     while not game_over:
@@ -87,28 +93,48 @@ def gameLoop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
-
+                break
             # If the user presses an arrow key
             if event.type == pygame.KEYDOWN:
 
                 # 3. Create if-statements that determine how the position of the snake
                 #   changes depending on which arrow key is pressed
                 #   Hint: Change the variables x1_change and y1_change
-
+                if event.key == pygame.K_UP:
+                    y1_change = -15
+                    x1_change = 0
+                elif event.key == pygame.K_RIGHT:
+                    x1_change = 15
+                    y1_change = 0
+                elif event.key == pygame.K_DOWN:
+                    y1_change = 15
+                    x1_change = 0
+                elif event.key == pygame.K_LEFT:
+                    x1_change = -15
+                    y1_change = 0
         # 4. Check if the position of x1 or y1 is outside of the display
+        if x1>=dis_width or x1<=0 or y1>=dis_height or y1<=0:
+            game_close = true
+
 
         # 5. Add the change of the position to the position
+        x1 += x1_change
+        y1 += y1_change
 
         dis.fill(blue)
         pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
 
         # 6. Create an empty list for the current position of the snake
+        snakepos = []
 
         # 7. Append the current position of the snake to the list
         #    Hint: You're creating a list with the length of two where
         #          [0] is x and [1] is y
+        snakepos.append(x1)
+        snakepos.append(y1)
 
         # 8. Add the new list you just created to snake_List
+        snake_list.append(snakepos)
 
         # 9. If the length of snake_List is bigger than the snake_length,
         #   delete the first index of snake_List
@@ -116,6 +142,8 @@ def gameLoop():
         #       lists of positions on the display that your snake is occupying.
         #       So you're deleting positions your snake has moved off of
         #       (which would be the oldest entry)
+        if len(snake_list) > len(snakepos):
+            del snake_list[0]
 
         # 10. Check if any part of your snake is touching any other part of your snake
         #   If so, end the game

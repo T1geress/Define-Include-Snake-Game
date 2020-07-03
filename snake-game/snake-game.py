@@ -25,7 +25,7 @@ pygame.display.set_caption('Snake Game')
 clock = pygame.time.Clock()
 
 snake_block = 10
-snake_speed = 10
+snake_speed = 15
 
 # Sets fonts
 font_style = pygame.font.SysFont("bahnschrift", 25)
@@ -45,7 +45,7 @@ def our_snake(snake_block, snake_List):
 # A function to display messages
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [dis_width / 6, dis_height / 3])
+    dis.blit(mesg, [dis_width // 6, dis_height // 3])
 
 # The main function of the game
 def gameLoop():
@@ -101,16 +101,16 @@ def gameLoop():
                 #   changes depending on which arrow key is pressed
                 #   Hint: Change the variables x1_change and y1_change
                 if event.key == pygame.K_UP:
-                    y1_change = -10
+                    y1_change = -snake_block
                     x1_change = 0
                 elif event.key == pygame.K_RIGHT:
-                    x1_change = 10
+                    x1_change = snake_block
                     y1_change = 0
                 elif event.key == pygame.K_DOWN:
-                    y1_change = 10
+                    y1_change = snake_block
                     x1_change = 0
                 elif event.key == pygame.K_LEFT:
-                    x1_change = -10
+                    x1_change = -snake_block
                     y1_change = 0
         # 4. Check if the position of x1 or y1 is outside of the display
         if x1>=dis_width or x1<=0 or y1>=dis_height or y1<=0:
@@ -142,11 +142,14 @@ def gameLoop():
         #       lists of positions on the display that your snake is occupying.
         #       So you're deleting positions your snake has moved off of
         #       (which would be the oldest entry)
-        if len(snake_List) > len(snakepos):
+        if len(snake_List) > snake_length:
             del snake_List[0]
 
         # 10. Check if any part of your snake is touching any other part of your snake
         #   If so, end the game
+        for x in snake_List[:-1]:
+            if x == snakepos:
+                game_close = True
 
 
         our_snake(snake_block, snake_List)
@@ -157,8 +160,10 @@ def gameLoop():
         # 11. Check if the position of the snake's head matches the position of the food
         #   If so, randomly generate a new food item
         #   And increase the length of the snake by 1
-        if x1 == foodx and y1 == foodx:
+        if x1 == foodx and y1 == foody:
             snake_length = snake_length + 1
+            foodx = random.randint(0, dis_width//10) * 10
+            foody = random.randint(0, dis_height//10) * 10
 
         clock.tick(snake_speed)
 

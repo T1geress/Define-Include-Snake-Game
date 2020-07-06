@@ -113,7 +113,7 @@ def gameLoop():
                     x1_change = -snake_block
                     y1_change = 0
         # 4. Check if the position of x1 or y1 is outside of the display
-        if x1>=dis_width or x1<=0 or y1>=dis_height or y1<=0:
+        if x1>dis_width or x1<0 or y1>dis_height or y1<0:
             game_close = True
 
 
